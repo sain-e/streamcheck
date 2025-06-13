@@ -1,0 +1,27 @@
+# General
+.DS_Store
+.env
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+node_modules/
+
+# Vite + React frontend
+/vite-react/node_modules/
+/vite-react/dist/
+/vite-react/.env
+/vite-react/.vite
+
+# Express + MongoDB backend
+/express-mongodb/node_modules/
+/express-mongodb/.env
+
+# IDEs y editores
+.vscode/
+.idea/
+*.swp
+
+# Optional OS junk
+Thumbs.db
+ehthumbs.db
