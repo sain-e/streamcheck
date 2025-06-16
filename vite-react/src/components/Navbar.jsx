@@ -1,15 +1,32 @@
-import { Link } from "react-router-dom";
-import styles from "./Navbar.module.css"; // Import CSS module
+import { Link } from 'react-router-dom';
+import { AppBar, Box, Button, IconButton, Toolbar, Typography } from '@mui/material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 
-export default function Navbar() {
+const Navbar = ({ isLoggedIn = true }) => {
   
     return (
-    <nav className={styles.navbar}>
-        <ul className={styles.navLinks}>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/login">Login</Link></li>
-            
-        </ul>
-    </nav>
+    <AppBar position="static" color="primary">
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
+            <Box sx={{ display: 'flex', gap: 2 }}>
+                <Typography variant="h6" component={Link} to="/" color="inherit">
+                    StreamCheck
+                </Typography>
+                <Button component={Link} to="/" color="inherit">Películas</Button>
+                <Button component={Link} to="/" color="inherit">Series</Button>
+            </Box>
+
+            <Box>
+            {isLoggedIn ? (
+                <IconButton color="inherit" component={Link} to="/">
+                    <AccountCircle />
+                </IconButton>
+            ) : (
+                <Button color="inherit" component={Link} to="/login">Iniciar sesión</Button>
+            )}
+            </Box>
+        </Toolbar>
+    </AppBar>
     );
 }
+
+export default Navbar;
