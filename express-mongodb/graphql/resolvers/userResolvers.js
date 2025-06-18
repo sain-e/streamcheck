@@ -1,49 +1,29 @@
 import { ObjectId } from 'mongodb';
 
-export const typeDefs = /* GraphQL */ `
-    type User {
-        _id: ID!
-        name: String!
-    }
+const COLLECTION_NAME = 'users';
 
-    type Query {
-        users: [User!]!
-        user(id: ID!): User
-    }
-
-    input UserInput {
-        name: String!
-    }
-    
-    type Mutation {
-        addUser(input: UserInput!): User!
-        updateUser(id: ID!, input: UserInput!): User
-        deleteUser(id: ID!): Boolean
-    }
-`;
-
-export const resolvers = {
+export const userResolvers = {
     Query: {
         users: async (_parent, _args, context) => {
             const db = context.db;
-            return await db.collection('users').find().toArray();
+            return await db.collection(COLLECTION_NAME).find().toArray();
         },
         user: async (_parent, { id }, context) => {
             const db = context.db;
-            return await db.collection('users').findOne({ _id: new ObjectId(id) });
+            return await db.collection(COLLECTION_NAME).findOne({ _id: new ObjectId(id) });
         },
     },
     Mutation: {
         addUser: async (_parent, { input }, context) => {
             const db = context.db;
             const user = { ...input };
-            const result = await db.collection('users').insertOne(user);
+            const result = await db.collection(COLLECTION_NAME).insertOne(user);
             return { _id: result.insertedId, ...user };
         },
         updateUser: async (_parent, { id, input }, context) => {
             const db = context.db;
 
-            const updateResult = await db.collection('users').findOneAndUpdate(
+            const updateResult = await db.collection(COLLECTION_NAME).findOneAndUpdate(
                 { _id: new ObjectId(id) },
                 { $set: { ...input} },
                 { returnDocument: 'after' }
@@ -52,7 +32,7 @@ export const resolvers = {
         },
         deleteUser: async (_parent, { id }, context) => {
             const db = context.db;
-            const result = await db.collection('users').deleteOne({ _id: new ObjectId(id) });
+            const result = await db.collection(COLLECTION_NAME).deleteOne({ _id: new ObjectId(id) });
             return result.deletedCount === 1;
         },
     },

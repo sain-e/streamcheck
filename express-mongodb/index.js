@@ -1,11 +1,12 @@
 import express from 'express';
 import cors from 'cors';
 import connectDB from './db-connect.js';
+import dotenv from 'dotenv';
 
-import { createYoga, createSchema } from 'graphql-yoga';
-import { typeDefs, resolvers } from './graphql/usersSchema.js';
+import { createYoga } from 'graphql-yoga';
+import { schema } from './graphql/schema.js';
 
-import usersRouter from './routes/usersRoutes.js';
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -20,27 +21,19 @@ async function startServer() {
         const db = await connectDB();
         app.locals.db = db;
 
-        // Mount REST routes
-        app.use('/users', usersRouter);
-
         // Setup GraphQL Yoga
         const yoga = createYoga({
-            schema: createSchema({
-                typeDefs,
-                resolvers,
-            }) ,
+            schema,
             context: ({ request }) => ({
                 db: app.locals.db,  // Pass your MongoDB connection to resolvers
             }),
         });
-
 
         // Mount Yoga at /graphql
         app.use('/graphql', yoga);
 
         // Start server
         app.listen(PORT, () => {
-            console.log(`Server running on http://localhost:${PORT}`);
             console.log(`GraphQL endpoint at http://localhost:${PORT}/graphql`);
         });
     } catch (error) {
