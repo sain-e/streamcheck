@@ -1,5 +1,7 @@
+const API_URL = import.meta.env.VITE_API_URL;
+
 async function fetchGraphQL(query, variables = {}) {
-    const res = await fetch('http://localhost:5000/graphql', {
+    const res = await fetch(`${API_URL}/graphql`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query, variables }),
