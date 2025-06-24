@@ -17,7 +17,9 @@ export async function getUsers() {
         query {
             users {
                 _id
-                name
+                username
+                email
+                password
             }
         }
     `;
@@ -25,15 +27,16 @@ export async function getUsers() {
     return data.users;
 }
 
-export async function addUser(name) {
+export async function addUser(username, email, password) {
     const mutation = `
-        mutation ($name: String!) {
-            addUser(name: $name) {
-                _id
-                name
-            }
+        mutation {
+            addUser(input: {
+                username: $username
+                email: $email
+                password: $password
+            })
         }
     `;
-    const data = await fetchGraphQL(mutation, { name });
+    const data = await fetchGraphQL(mutation, { username, email, password });
     return data.addUser;
 }

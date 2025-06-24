@@ -1,7 +1,9 @@
 export const userTypeDefs = /* GraphQL */ `
     type User {
         _id: ID!
-        name: String!
+        username: String!
+        email: String!
+        password: String!
     }
 
     extend type Query {
@@ -10,7 +12,9 @@ export const userTypeDefs = /* GraphQL */ `
     }
 
     input UserInput {
-        name: String
+        username: String
+        email: String
+        password: String
     }
     
     extend type Mutation {

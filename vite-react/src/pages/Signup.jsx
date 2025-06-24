@@ -1,17 +1,26 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { Link } from 'react-router-dom';
+import { addUser } from "../graphql/users";
 
 export default function Signup() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [email, setEmail] = useState('');
+    const [message, setMessage] = useState('');
 
     const handleSignUp = async (e) => {
         e.preventDefault();
 
+        if (password !== passwordConfirm) {
+            setMessage('Error las contraseñas no coinciden!');
+        }
 
+        const res = addUser(username, email, password);
+
+        console.log(res);
+        setMessage('Registro completado!')
     };
   
     return (
@@ -81,6 +90,9 @@ export default function Signup() {
             ¿Ya tienes cuenta? Pincha aquí!
             </Typography>
         </Paper>
+        {message && (
+            <Typography variant="body2" color="secondary">{message}</Typography>
+        )}
     </Box>
     );
 }

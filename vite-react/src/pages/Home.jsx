@@ -7,7 +7,7 @@ export default function Home() {
     return (
     <Box>
         <h1>Inicio</h1>
-        <UserList />
+        <MovieList />
     </Box>
     );
 }

@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb';
+import bcrypt, { hash } from 'bcrypt';
 
 const COLLECTION_NAME = 'users';
 
@@ -15,8 +16,12 @@ export const userResolvers = {
     },
     Mutation: {
         addUser: async (_parent, { input }, context) => {
+            const { username, email, password } = input;
             const db = context.db;
-            const user = { ...input };
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            const user = { username, email, hashedPassword };
             const result = await db.collection(COLLECTION_NAME).insertOne(user);
             return { _id: result.insertedId, ...user };
         },
