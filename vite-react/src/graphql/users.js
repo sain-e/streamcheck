@@ -15,27 +15,25 @@ async function fetchGraphQL(query, variables = {}) {
 export async function getUsers() {
     const query = `
         query {
-        users {
-            _id
-            username
-            email
-        }
+            users {
+                _id
+                name
+            }
         }
     `;
     const data = await fetchGraphQL(query);
     return data.users;
 }
 
-export async function addUser(username, email) {
+export async function addUser(name) {
     const mutation = `
-        mutation ($username: String!, $email: String!) {
-        addUser(username: $username, email: $email) {
-            _id
-            username
-            email
-        }
+        mutation ($name: String!) {
+            addUser(name: $name) {
+                _id
+                name
+            }
         }
     `;
-    const data = await fetchGraphQL(mutation, { username, email });
+    const data = await fetchGraphQL(mutation, { name });
     return data.addUser;
 }
