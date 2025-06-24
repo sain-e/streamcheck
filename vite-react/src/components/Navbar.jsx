@@ -8,20 +8,20 @@ const Navbar = ({ isLoggedIn = true }) => {
     <AppBar position="static" color="primary">
         <Toolbar sx={{ justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', gap: 2 }}>
-                <Typography variant="h6" component={Link} to="/" color="inherit">
+                <Typography variant="h6" component={Link} to="/" color="text.primary">
                     StreamCheck
                 </Typography>
-                <Button component={Link} to="/" color="inherit">Películas</Button>
-                <Button component={Link} to="/" color="inherit">Series</Button>
+                <Button component={Link} to="/" color="text.primary">Películas</Button>
+                <Button component={Link} to="/" color="text.primary">Series</Button>
             </Box>
 
             <Box>
             {isLoggedIn ? (
-                <IconButton color="inherit" component={Link} to="/">
+                <IconButton color="text.primary" component={Link} to="/">
                     <AccountCircle />
                 </IconButton>
             ) : (
-                <Button color="inherit" component={Link} to="/login">Iniciar sesión</Button>
+                <Button color="text.primary" component={Link} to="/login">Iniciar sesión</Button>
             )}
             </Box>
         </Toolbar>

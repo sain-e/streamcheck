@@ -2,11 +2,13 @@ import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { Link } from 'react-router-dom';
 
-export default function Login() {
+export default function Signup() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [passwordConfirm, setPasswordConfirm] = useState('');
+    const [email, setEmail] = useState('');
 
-    const handleLogin = async (e) => {
+    const handleSignUp = async (e) => {
         e.preventDefault();
 
 
@@ -29,18 +31,26 @@ export default function Login() {
                 gap: 2
             }}
             component="form" 
-            onSubmit={handleLogin}
+            onSubmit={handleSignUp}
         >
             <Typography variant="h5" color="text.secondary" align="center">
-            Iniciar Sesión
+            Crear cuenta
             </Typography>
             <TextField 
                 id="username-input" 
                 label="Usuario" 
                 variant="outlined" 
                 value={username} 
-                onChange={(e) => setUsername(e.target.value)}
-                required 
+                onChange={(e) => setUsername(e.target.value)} 
+                required
+            />
+            <TextField 
+                id="email-input" 
+                label="Email" 
+                variant="outlined" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                required
             />
             <TextField 
                 type="password" 
@@ -51,15 +61,24 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)} 
                 required
             />
+            <TextField 
+                type="password" 
+                id="password-confirm-input" 
+                label="Confirmar contraseña" 
+                variant="outlined" 
+                value={passwordConfirm} 
+                onChange={(e) => setPasswordConfirm(e.target.value)} 
+                required
+            />
             <Button 
                 variant="contained" 
                 color="primary" 
                 type="submit"
             >
-            Entrar
+            Crear
             </Button>
-            <Typography variant="body2" component={Link} to="/signup" color="primary">
-            ¿No tienes cuenta? Crea una aquí!
+            <Typography variant="body2" component={Link} to="/login" color="primary">
+            ¿Ya tienes cuenta? Pincha aquí!
             </Typography>
         </Paper>
     </Box>
