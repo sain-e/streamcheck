@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import connectDB from './db-connect.js';
 import dotenv from 'dotenv';
+import jwt from "jsonwebtoken";
 
 import { createYoga } from 'graphql-yoga';
 import { schema } from './graphql/schema.js';

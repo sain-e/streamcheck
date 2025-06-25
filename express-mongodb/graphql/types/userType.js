@@ -17,9 +17,15 @@ export const userTypeDefs = /* GraphQL */ `
         password: String
     }
     
+    type AuthUser {
+        token: String!
+        user: User!
+    }
+    
     extend type Mutation {
         addUser(input: UserInput!): User!
         updateUser(id: ID!, input: UserInput): User
         deleteUser(id: ID!): Boolean
+        loginUser(email: String!, password: String!): AuthUser!
     }
 `;

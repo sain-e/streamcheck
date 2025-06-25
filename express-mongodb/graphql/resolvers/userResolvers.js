@@ -1,7 +1,12 @@
 import { ObjectId } from 'mongodb';
+import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
+dotenv.config();
 
 const COLLECTION_NAME = 'users';
+const SECRET_KEY = '1234'; // app variable for tokens code
 
 export const userResolvers = {
     Query: {
@@ -49,6 +54,18 @@ export const userResolvers = {
             const db = context.db;
             const result = await db.collection(COLLECTION_NAME).deleteOne({ _id: new ObjectId(id) });
             return result.deletedCount === 1;
+        },
+        loginUser: async (_parent, { email, password }, context) => {
+            const db = context.db;
+
+            const user = await db.collection(COLLECTION_NAME).findOne({ email });
+            if (!user) throw new Error("Usuario no encontrado");
+
+            const validPassword = await bcrypt.compare(password, user.password);
+            if (!validPassword) throw new Error("Contraseña incorrecta");
+
+            const token = jwt.sign({ userId: user._id }, SECRET_KEY);
+            return { token, user };
         },
     },
 };
