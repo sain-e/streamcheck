@@ -66,11 +66,9 @@ export default function Signup() {
         } catch (err) {
             setSnackbar({
                 open: true,
-                severity: 'error',
-                message: 'Error al registrar el usuario'
+                severity: 'warning',
+                message: err.message || 'Error al registrar el usuario'
             });
-
-            console.log(err);
         }
     };
   

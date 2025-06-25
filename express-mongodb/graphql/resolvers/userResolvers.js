@@ -16,14 +16,24 @@ export const userResolvers = {
     },
     Mutation: {
         addUser: async (_parent, { input }, context) => {
-            const { username, email, password } = input;
-            const db = context.db;
+            try {
+                const { username, email, password } = input;
+                const db = context.db;
 
-            const hashedPassword = await bcrypt.hash(password, 10); // hash password
+                // check if email already on use
+                const existingUser = await db.collection(COLLECTION_NAME).findOne({ email });
+                if (existingUser) {
+                    throw new Error('El email ya está registrado');
+                }
+                
+                const hashedPassword = await bcrypt.hash(password, 10); // hash password
 
-            const user = { username, email, password: hashedPassword };
-            const result = await db.collection(COLLECTION_NAME).insertOne(user);
-            return { _id: result.insertedId, ...user };
+                const user = { username, email, password: hashedPassword };
+                const result = await db.collection(COLLECTION_NAME).insertOne(user);
+                return { _id: result.insertedId, ...user };
+            } catch (err) {
+                throw new Error(err.message || 'Error inesperado al registrar usuario');
+            }
         },
         updateUser: async (_parent, { id, input }, context) => {
             const db = context.db;

@@ -9,7 +9,7 @@ export async function fetchGraphQL(query, variables = {}) {
 
     const json = await res.json();
 
-    if (json.errors) {
+    if (json.errors && json.errors.length > 0) {
         throw new Error(json.errors[0].message);
     }
     
