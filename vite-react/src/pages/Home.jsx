@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box } from '@mui/material';
 import MovieList from "../components/MoviesList";
 import UserList from "../components/UsersList";
 

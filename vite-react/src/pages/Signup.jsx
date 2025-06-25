@@ -1,26 +1,77 @@
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import { Box, Button, Paper, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { addUser } from "../graphql/users";
+import { addUser } from '../graphql/users';
+import SnackbarAlert from '../components/SnackbarAlert';
+import { isValidEmail, isStrongPassword } from '../utils/utils';
 
 export default function Signup() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [email, setEmail] = useState('');
-    const [message, setMessage] = useState('');
+
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        severity: 'success',
+        message: '',
+    });
+
+    const handleOnClose = () => {
+        setSnackbar((prev) => ({ ...prev, open: false}));
+    };
 
     const handleSignUp = async (e) => {
         e.preventDefault();
 
-        if (password !== passwordConfirm) {
-            setMessage('Error las contraseñas no coinciden!');
+        if (!isValidEmail(email)) {
+            return setSnackbar({
+                open: true,
+                severity: 'error',
+                message: 'Error: Email inválido'
+            });
         }
 
-        const res = addUser(username, email, password);
+        if (!isStrongPassword(password)) {
+            return setSnackbar({
+                open: true,
+                severity: 'error',
+                message: 'Error: La contraseña debe tener al menos 5 caracteres'
+            });
+        }
 
-        console.log(res);
-        setMessage('Registro completado!')
+        if (password !== passwordConfirm) {
+            return setSnackbar({
+                open: true,
+                severity: 'error',
+                message: 'Error: las contraseñas no coinciden'
+            });
+        }
+
+        try {
+            const response = await addUser(username, email, password);
+            console.log(response);
+
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                message: 'Registro completado!'
+            });
+
+            setUsername('');
+            setEmail('');
+            setPassword('');
+            setPasswordConfirm('');
+
+        } catch (err) {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                message: 'Error al registrar el usuario'
+            });
+
+            console.log(err);
+        }
     };
   
     return (
@@ -90,9 +141,12 @@ export default function Signup() {
             ¿Ya tienes cuenta? Pincha aquí!
             </Typography>
         </Paper>
-        {message && (
-            <Typography variant="body2" color="secondary">{message}</Typography>
-        )}
+        <SnackbarAlert
+            open={snackbar.open}
+            severity={snackbar.severity}
+            message={snackbar.message}
+            onClose={handleOnClose}
+        />
     </Box>
     );
 }

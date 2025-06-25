@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { AppBar, Box, Button, IconButton, Toolbar, Typography } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
-const Navbar = ({ isLoggedIn = true }) => {
+export default function Navbar({ isLoggedIn = true }) {
   
     return (
     <AppBar position="static" color="primary">
@@ -28,5 +28,3 @@ const Navbar = ({ isLoggedIn = true }) => {
     </AppBar>
     );
 }
-
-export default Navbar;

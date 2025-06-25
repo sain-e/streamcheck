@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import bcrypt, { hash } from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 const COLLECTION_NAME = 'users';
 
@@ -19,9 +19,9 @@ export const userResolvers = {
             const { username, email, password } = input;
             const db = context.db;
 
-            const hashedPassword = await bcrypt.hash(password, 10);
+            const hashedPassword = await bcrypt.hash(password, 10); // hash password
 
-            const user = { username, email, hashedPassword };
+            const user = { username, email, password: hashedPassword };
             const result = await db.collection(COLLECTION_NAME).insertOne(user);
             return { _id: result.insertedId, ...user };
         },
