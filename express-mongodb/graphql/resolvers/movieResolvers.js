@@ -9,7 +9,11 @@ export const movieResolvers = {
             const data = await db.collection(COLLECTION_NAME).find().toArray();
             return data.map(movie => ({
                 ...movie,
-                releaseDate: movie.releaseDate.toISOString(),
+                releaseDate: new Date(movie.releaseDate).toLocaleDateString(undefined, {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                }),
             }));
         },
         movie: async (_parent, { id }, context) => {

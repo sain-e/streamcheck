@@ -5,7 +5,7 @@ export default function Home() {
   
     return (
     <Box>
-        <h1>Inicio</h1>
+        <h1>Top Películas</h1>
         <MovieList />
     </Box>
     );

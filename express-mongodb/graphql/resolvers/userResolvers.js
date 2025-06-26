@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 const COLLECTION_NAME = 'users';
-const SECRET_KEY = '1234'; // app variable for tokens code
+const SECRET_KEY = process.env.JWT_SECRET_KEY; // app variable for tokens code
 
 export const userResolvers = {
     Query: {

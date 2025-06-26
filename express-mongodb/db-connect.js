@@ -6,7 +6,7 @@ dotenv.config();
 // Load environment variables from a .env file if needed
 const MONGODB_URI = process.env.MONGODB_URI;
            
-const DB_NAME = 'streamcheck';
+const DB_NAME = process.env.MONGODB_DATABASE;
 
 let client;
 let db;
