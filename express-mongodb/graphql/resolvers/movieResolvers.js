@@ -6,7 +6,11 @@ export const movieResolvers = {
     Query: {
         movies: async (_parent, _args, context) => {
             const db = context.db;
-            return await db.collection(COLLECTION_NAME).find().toArray();
+            const data = await db.collection(COLLECTION_NAME).find().toArray();
+            return data.map(movie => ({
+                ...movie,
+                releaseDate: movie.releaseDate.toISOString(),
+            }));
         },
         movie: async (_parent, { id }, context) => {
             const db = context.db;

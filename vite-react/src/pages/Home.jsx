@@ -1,6 +1,5 @@
 import { Box } from '@mui/material';
 import MovieList from "../components/MoviesList";
-import UserList from "../components/UsersList";
 
 export default function Home() {
   

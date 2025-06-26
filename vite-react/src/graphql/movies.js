@@ -6,7 +6,12 @@ export async function getMovies() {
             movies {
                 _id
                 title
+                description
+                releaseDate
                 duration
+                genres
+                posterUrl
+                trailerUrl
             }
         }
     `;
