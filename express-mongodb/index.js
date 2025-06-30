@@ -25,9 +25,24 @@ async function startServer() {
         // Setup GraphQL Yoga
         const yoga = createYoga({
             schema,
-            context: ({ request }) => ({
-                db: app.locals.db,  // Pass your MongoDB connection to resolvers
-            }),
+            context: ({ request }) => {
+                const db = app.locals.db;  // Pass your MongoDB connection to resolvers
+               
+                const auth = request.headers.get('authorization') || '';
+                const token = auth.replace('Bearer', '');
+
+                let user = null;
+
+                if (token) {
+                    try {
+                        user = jwt.verify(token, process.env.JWT_SECRET_KEY);
+                    } catch (err) {
+                        console.warn('Token inválido o expirado');
+                    }
+                }
+
+                return { db, request, user };
+            },
         });
 
         // Mount Yoga at /graphql

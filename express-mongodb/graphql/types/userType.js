@@ -8,7 +8,7 @@ export const userTypeDefs = /* GraphQL */ `
 
     extend type Query {
         users: [User!]!
-        user(id: ID!): User
+        user(id: ID): User
     }
 
     input UserInput {

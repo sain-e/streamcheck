@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 const COLLECTION_NAME = 'users';
-const SECRET_KEY = process.env.JWT_SECRET_KEY; // app variable for tokens code
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 export const userResolvers = {
     Query: {
@@ -14,9 +14,16 @@ export const userResolvers = {
             const db = context.db;
             return await db.collection(COLLECTION_NAME).find().toArray();
         },
-        user: async (_parent, { id }, context) => {
+        user: async (_parent, { id }, { context, user }) => {
+            console.log(id, user)
+            if (!user) throw new Error('No autorizado');
+            console.log(user.userId)
+            const targetId = id || user.userId;
+            
+            if (targetId !== user.userId) throw new Error('Acceso denegado');
+            
             const db = context.db;
-            return await db.collection(COLLECTION_NAME).findOne({ _id: new ObjectId(id) });
+            return await db.collection(COLLECTION_NAME).findOne({ _id: new ObjectId(targetId) });
         },
     },
     Mutation: {
@@ -64,7 +71,7 @@ export const userResolvers = {
             const validPassword = await bcrypt.compare(password, user.password);
             if (!validPassword) throw new Error("Contraseña incorrecta");
 
-            const token = jwt.sign({ userId: user._id }, SECRET_KEY);
+            const token = jwt.sign({ userId: user._id }, SECRET_KEY); // Option: { expiresIn: '1h' } 
             return { token, user };
         },
     },
