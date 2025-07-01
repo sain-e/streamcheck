@@ -28,19 +28,23 @@ async function startServer() {
             context: ({ request }) => {
                 const db = app.locals.db;  // Pass your MongoDB connection to resolvers
                
-                const auth = request.headers.get('authorization') || '';
-                const token = auth.replace('Bearer', '');
+                const authHeader = request.headers.get?.('authorization') || '';
+                console.log(request.headers)
+                console.log("Token recibido en headers:", authHeader);
+                const token = authHeader.replace('Bearer ', '');
 
                 let user = null;
 
                 if (token) {
                     try {
-                        user = jwt.verify(token, process.env.JWT_SECRET_KEY);
+                        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+                        user = { userId: decoded.userId}
                     } catch (err) {
                         console.warn('Token inválido o expirado');
                     }
                 }
-
+                
+                console.log("user desde context: ", user)
                 return { db, request, user };
             },
         });

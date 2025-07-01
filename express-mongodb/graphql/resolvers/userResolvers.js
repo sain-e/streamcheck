@@ -14,16 +14,24 @@ export const userResolvers = {
             const db = context.db;
             return await db.collection(COLLECTION_NAME).find().toArray();
         },
-        user: async (_parent, { id }, { context, user }) => {
-            console.log(id, user)
-            if (!user) throw new Error('No autorizado');
-            console.log(user.userId)
-            const targetId = id || user.userId;
-            
-            if (targetId !== user.userId) throw new Error('Acceso denegado');
-            
-            const db = context.db;
-            return await db.collection(COLLECTION_NAME).findOne({ _id: new ObjectId(targetId) });
+        user: async (_parent, _args, context) => {
+            console.log
+            const { id } = _args;
+            const { db, user } = context;
+            try {
+                console.log("Resolver Context: ", id, user)
+                if (!user) throw new Error('No autorizado');
+                console.log(user.userId)
+                const targetId = id || user.userId;
+                
+                if (targetId !== user.userId) throw new Error('Acceso denegado');
+                
+                const db = context.db;
+                return await db.collection(COLLECTION_NAME).findOne({ _id: new ObjectId(targetId) });
+            } catch (err) {
+                console.error('Error en resolver "user":', err.message);
+                throw new Error(err.message); // Asegura que GraphQL devuelva el mensaje real
+            }
         },
     },
     Mutation: {
@@ -70,8 +78,9 @@ export const userResolvers = {
 
             const validPassword = await bcrypt.compare(password, user.password);
             if (!validPassword) throw new Error("Contraseña incorrecta");
-
-            const token = jwt.sign({ userId: user._id }, SECRET_KEY); // Option: { expiresIn: '1h' } 
+            console.log("Desde resolvers: ", user);
+            const token = jwt.sign({ userId: user._id }, SECRET_KEY, { expiresIn: '1h' }); // Option: { expiresIn: '1h' } 
+            console.log("Desde resolvers: ", token);
             return { token, user };
         },
     },
