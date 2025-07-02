@@ -1,17 +1,22 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
 export async function fetchGraphQL(query, variables = {}) {
+    const token = localStorage.getItem('token');
+
     const res = await fetch(`${API_URL}/graphql`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json',
+            ...(token && { Authorization: `Bearer ${token}` })
+        },
         body: JSON.stringify({ query, variables }),
     });
 
-    const json = await res.json();
+    const { data, errors } = await res.json();
 
-    if (json.errors && json.errors.length > 0) {
-        throw new Error(json.errors[0].message);
+    if (errors && errors.length > 0) {
+        throw new Error(errors[0].message);
     }
     
-    return json.data;
+    return data;
 }

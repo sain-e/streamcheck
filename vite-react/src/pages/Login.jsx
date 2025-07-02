@@ -1,15 +1,40 @@
 import { Box, Button, Paper, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import SnackbarAlert from '../components/SnackbarAlert';
+import { loginUser } from '../graphql/users';
 
 export default function Login() {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { login } = useAuth();
+    const navigate = useNavigate();
+
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        severity: 'success',
+        message: '',
+    });
+
+    const handleOnClose = () => {
+        setSnackbar((prev) => ({ ...prev, open: false}));
+    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
-
+        try {
+            const { token, user } = await loginUser(email, password);
+            await login(token, user);
+            navigate('/');
+        } catch (err) {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                message: err.message || 'Error al iniciar sesión'
+            });
+        }
     };
   
     return (
@@ -36,10 +61,10 @@ export default function Login() {
             </Typography>
             <TextField 
                 id="username-input" 
-                label="Usuario" 
+                label="Correo electronico" 
                 variant="outlined" 
-                value={username} 
-                onChange={(e) => setUsername(e.target.value)}
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)}
                 required 
             />
             <TextField 
@@ -62,6 +87,12 @@ export default function Login() {
             ¿No tienes cuenta? Crea una aquí!
             </Typography>
         </Paper>
+        <SnackbarAlert
+            open={snackbar.open}
+            severity={snackbar.severity}
+            message={snackbar.message}
+            onClose={handleOnClose}
+        />
     </Box>
     );
 }

@@ -29,7 +29,6 @@ async function startServer() {
                 const db = app.locals.db;  // Pass your MongoDB connection to resolvers
                
                 const authHeader = request.headers.get?.('authorization') || '';
-                console.log(request.headers)
                 console.log("Token recibido en headers:", authHeader);
                 const token = authHeader.replace('Bearer ', '');
 

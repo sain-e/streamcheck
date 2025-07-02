@@ -7,7 +7,7 @@ import Signup from './pages/Signup';
 export default function App() {
   return (
   <>
-    <Navbar isLoggedIn={false} />
+    <Navbar />
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
