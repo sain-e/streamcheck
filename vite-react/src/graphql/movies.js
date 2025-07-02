@@ -49,3 +49,37 @@ export async function addMovie(title, duration) {
     const data = await fetchGraphQL(mutation, { title, duration });
     return data.addMovie;
 }
+
+export async function addCompletedMovie(movieId) {
+    const mutation = `
+        mutation AddCompletedMovie($movieId: ID!) {
+            addCompletedMovie(movieId: $movieId) {
+                _id
+                completedlist {
+                    _id
+                    title
+                }
+            }
+        }
+    `;
+    const variables = { movieId };
+    const data = await fetchGraphQL(mutation, variables);
+    return data.addCompletedMovie;
+}
+
+export async function removeCompletedMovie(movieId) {
+  const mutation = `
+    mutation RemoveCompletedMovie($movieId: ID!) {
+        removeCompletedMovie(movieId: $movieId) {
+            _id
+            completedlist {
+                _id
+                title
+            }
+        }
+    }
+  `;
+  const variables = { movieId };
+  const data = await fetchGraphQL(mutation, variables);
+  return data.removeCompletedMovie;
+}

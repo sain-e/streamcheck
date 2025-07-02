@@ -3,7 +3,7 @@ export const userTypeDefs = /* GraphQL */ `
         _id: ID!
         username: String!
         email: String!
-        password: String!
+        completedlist: [Movie!]
     }
 
     extend type Query {
@@ -27,5 +27,8 @@ export const userTypeDefs = /* GraphQL */ `
         updateUser(id: ID!, input: UserInput): User
         deleteUser(id: ID!): Boolean
         loginUser(email: String!, password: String!): AuthUser!
+
+        addCompletedMovie(movieId: ID!): User!
+        removeCompletedMovie(movieId: ID!): User!
     }
 `;

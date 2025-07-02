@@ -29,7 +29,6 @@ async function startServer() {
                 const db = app.locals.db;  // Pass your MongoDB connection to resolvers
                
                 const authHeader = request.headers.get?.('authorization') || '';
-                console.log("Token recibido en headers:", authHeader);
                 const token = authHeader.replace('Bearer ', '');
 
                 let user = null;
@@ -43,7 +42,6 @@ async function startServer() {
                     }
                 }
                 
-                console.log("user desde context: ", user)
                 return { db, request, user };
             },
         });
