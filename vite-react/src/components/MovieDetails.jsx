@@ -1,15 +1,17 @@
 import { Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Select, Stack, Typography } from "@mui/material";
 import { useState } from 'react';
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/AuthContext';
+import { addCompletedMovie } from '../graphql/movies';
 
 export default function MovieDetails({ open, onClose, movie }) {
   const [status, setStatus] = useState('Plan to watch');
   const { user } = useAuth();
 
-  const handleSaveMovie = async (id, status) => {
-    console.log(id, status);
+  const handleSaveMovie = async (e) => {
+    e.preventDefault();
+    console.log(movie._id, status);
     if (status == 'Completed') {
-      const updatedUser = await addCompletedMovie(id);
+      const updatedUser = await addCompletedMovie(movie._id);
     }
   };
     
@@ -54,7 +56,7 @@ export default function MovieDetails({ open, onClose, movie }) {
         </Button>
         )}
 
-        <Button onClick={user ? handleSaveMovie(movie._id, status) : onClose} color="primary" variant="outlined">{user ? 'Guardar' : 'Cerrar'}</Button>
+        <Button onClick={user ? handleSaveMovie : onClose} color="primary" variant="outlined">{user ? 'Guardar' : 'Cerrar'}</Button>
       </DialogActions>
     </DialogContent>
   </Dialog>
